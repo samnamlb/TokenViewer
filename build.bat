@@ -3,17 +3,16 @@ setlocal
 
 echo Building TokenViewer.exe...
 set "CSC=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
+if exist "%CSC%" goto :compile
 
-if not exist "%CSC%" (
-    set "CSC=C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe"
-)
+set "CSC=C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe"
+if exist "%CSC%" goto :compile
 
-if not exist "%CSC%" (
-    echo Error: C# compiler (csc.exe) not found!
-    pause
-    exit /b 1
-)
+echo Error: C# compiler (csc.exe) not found!
+pause
+exit /b 1
 
+:compile
 "%CSC%" /target:winexe /win32icon:"%~dp0TokenViewer.ico" /out:"%~dp0TokenViewer.exe" "%~dp0TokenViewer.cs"
 
 if %errorlevel%==0 (
