@@ -1,32 +1,32 @@
 # TokenViewer
 
-> A brutally simple token counter and visualizer for LLMs with a classic early-2000s Eclipse IDE aesthetic. Works like Notepad, counts like tiktoken.
+> A brutally simple token counter and visualizer for LLMs. Works like Notepad.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Web-lightgrey.svg)](#)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg)](#)
 
-TokenViewer is a zero-dependency, ultra-lightweight application that lets you type or paste text and instantly see how large language models tokenize it. It estimates token counts in real time, highlights token boundaries with distinct colors, and provides actionable heuristics to optimize and shorten your prompts.
+TokenViewer is a ightweight application that lets you type or paste text and instantly see how large language models tokenize it. It estimates token counts in real time, highlights token boundaries with distinct colors, and provides actionable heuristics to optimize and shorten your prompts.
 
 ---
 
 ## Ways to Run
 
-### 1. 🌐 Web & PWA (Zero Install)
+### 1. Web & PWA (No install)
 - Host on **GitHub Pages** by pushing this repo (auto-deploys via GitHub Actions).
 - Open `index.html` in any modern browser.
 - **Install as Desktop App:** Click the **Install TokenViewer** icon in your browser's address bar (Chrome / Edge) to add it directly to your Windows Start Menu and Desktop. Works 100% offline via Service Worker.
 
-### 2. ⚡ Standalone Native Executable (`TokenViewer.exe`)
+### 2. Standalone Native Executable
 - Download `TokenViewer.exe` from [Releases](https://github.com/your-username/TokenViewer/releases).
 - Only **~97 KB** (embeds native hi-res icon, zero console window flash).
 - Runs in dedicated frameless app mode using Windows' built-in browser engine.
 
-### 3. 📦 Portable ZIP
+### 3. Portable ZIP
 - Download `TokenViewer-Portable.zip`.
 - Extract anywhere and double-click `TokenViewer.exe` or `CreateShortcut.vbs` to add a desktop shortcut.
 
-### 4. 💿 Windows Installer (`TokenViewer-Setup.exe`)
+### 4. Windows Installer
 - Run the Inno Setup wizard to install TokenViewer into `%LOCALAPPDATA%` or `Program Files`.
 - Automatically sets up Start Menu and Desktop shortcuts and clean uninstall support.
 
@@ -34,7 +34,6 @@ TokenViewer is a zero-dependency, ultra-lightweight application that lets you ty
 
 ## Features
 
-- **Classic Eclipse IDE Interface** — Early-2000s professional suite aesthetic: 3D beveled borders, Tahoma UI font, Courier New text editor, sunken status bar fields, and zero emojis.
 - **Real-Time Token Estimation** — Live token counts update instantly as you type.
 - **Token Highlighting** — Toggle alternating background colors to visualize exact token boundaries (`Ctrl+H`).
 - **Token Analysis Panel** — Detailed breakdown with 3 views (`Ctrl+B`):
@@ -78,8 +77,6 @@ TokenViewer/
 │   └── workflows/
 │       ├── deploy-pages.yml   # Auto-deploys to GitHub Pages on push
 │       └── release.yml        # Builds .exe, installer & zip on git tag (v*)
-├── TokenViewer.cs             # C# source for lightweight Windows launcher
-├── build.bat                  # Local one-click build script (uses csc.exe)
 ├── installer.iss              # Inno Setup installer script
 ├── index.html                 # Main application (GitHub Pages entry)
 ├── TokenViewer.html           # Standalone application file
@@ -93,45 +90,6 @@ TokenViewer/
 ├── LICENSE                    # MIT License
 └── README.md                  # Project documentation
 ```
-
----
-
-## Building Locally
-
-No external SDKs or Node.js required! Windows already includes the C# compiler:
-
-1. Double-click `build.bat` (or run in terminal):
-   ```cmd
-   build.bat
-   ```
-2. It compiles `TokenViewer.cs` using Windows' built-in `csc.exe` and links `TokenViewer.ico`.
-3. Output: `TokenViewer.exe` (~97 KB).
-
----
-
-## Publishing to GitHub
-
-1. **Initialize & push to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit of TokenViewer"
-   git remote add origin https://github.com/<your-username>/TokenViewer.git
-   git branch -M main
-   git push -u origin main
-   ```
-2. **Enable GitHub Pages:**
-   - In GitHub, go to **Settings** → **Pages** → Source: **GitHub Actions**.
-   - Your web app is immediately live at `https://<your-username>.github.io/TokenViewer/`!
-3. **Publish a Release:**
-   - Push a tag:
-     ```bash
-     git tag v1.0.0
-     git push origin v1.0.0
-     ```
-   - The `.github/workflows/release.yml` workflow will automatically build `TokenViewer.exe`, compile `TokenViewer-Setup.exe`, create `TokenViewer-Portable.zip`, and publish them directly to your Releases tab.
-
----
 
 ## License
 
