@@ -168,12 +168,23 @@ button, select {
    ============================================================ */
 #toolbar {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 2px;
   padding: 2px 4px;
   background: var(--bg-toolbar);
   border-bottom: 1px solid var(--bg-toolbar-border);
   flex-shrink: 0;
+}
+
+.toolbar-band {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.toolbar-spacer {
+  flex: 1;
 }
 
 .toolbar-group {
@@ -574,43 +585,36 @@ button, select {
    ============================================================ */
 @media (max-width: 768px) {
   #panel {
-    width: 250px;
+    width: 260px;
   }
 }
 
 @media (max-width: 640px) {
   #toolbar {
-    flex-wrap: wrap;
-    row-gap: 3px;
-    column-gap: 4px;
-    padding: 3px 4px;
-    justify-content: flex-start;
-  }
-  .toolbar-group {
-    flex-wrap: wrap;
+    padding: 3px;
     gap: 3px;
+  }
+  .toolbar-band {
+    justify-content: space-between;
   }
   .toolbar-separator {
     display: none;
   }
-  .app-logo {
-    padding: 0 2px;
-  }
-  .app-logo span {
-    font-size: 11px;
-  }
-  button, select {
-    min-height: 28px;
-    padding: 2px 7px;
-    font-size: 11px;
+  button {
+    font-size: 11.5px;
+    min-height: 30px;
+    padding: 3px 8px;
     touch-action: manipulation;
+  }
+  select {
+    font-size: 11.5px;
+    min-height: 30px;
+    padding: 2px 6px;
+    max-width: 135px;
+    text-overflow: ellipsis;
   }
   .toolbar-label {
     display: none;
-  }
-  #model-select {
-    max-width: 140px;
-    text-overflow: ellipsis;
   }
   #workspace {
     position: relative;
@@ -618,22 +622,24 @@ button, select {
     overflow: hidden;
   }
   #editor-container {
-    margin: 1px;
+    margin: 0;
+    border-left: none;
+    border-right: none;
   }
   #gutter {
-    width: 32px;
+    width: 30px;
     font-size: 11px;
   }
   #gutter .line-num {
-    padding-right: 4px;
-    height: 23.2px;
+    padding-right: 3px;
+    height: 24px;
   }
   #backdrop, #editor {
-    padding: 6px 8px;
+    padding: 8px 10px;
   }
   #editor, #highlight-content {
-    font-size: 16px; /* 16px prevents iOS Safari auto-zoom on focus */
-    line-height: 1.45;
+    font-size: 16px; /* 16px prevents iOS Safari auto-zoom */
+    line-height: 1.5;
   }
   #panel {
     position: absolute;
@@ -649,39 +655,39 @@ button, select {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
   }
   .panel-header {
-    min-height: 32px;
-    padding: 4px 8px;
+    min-height: 34px;
+    padding: 4px 10px;
     font-size: 12px;
   }
   .panel-header-close {
     font-size: 18px;
-    padding: 2px 8px;
-    min-height: 28px;
+    padding: 2px 10px;
+    min-height: 30px;
   }
   .panel-tabs {
     background: var(--bg-toolbar);
   }
   .panel-tab {
-    padding: 6px 10px;
-    font-size: 11.5px;
-    min-height: 28px;
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 30px;
   }
   .token-chip {
-    max-width: 130px;
+    max-width: 140px;
   }
   #statusbar {
+    padding: 3px 6px;
+    gap: 3px;
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
-    padding: 3px 4px;
-    gap: 3px;
     scrollbar-width: none;
   }
   #statusbar::-webkit-scrollbar {
     display: none;
   }
   .stat-item {
-    font-size: 10px;
+    font-size: 10.5px;
     padding: 2px 6px;
     min-height: 20px;
     flex-shrink: 0;
@@ -702,8 +708,11 @@ button, select {
     max-width: 120px;
   }
   #btn-highlight, #btn-panel {
-    font-size: 10.5px;
-    padding: 2px 6px;
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+  #stat-pos, #stat-lines, #stat-ratio {
+    display: none;
   }
 }
 </style>
@@ -713,36 +722,39 @@ button, select {
 <div id="app">
   <!-- ==================== TOOLBAR ==================== -->
   <header id="toolbar">
-    <div class="toolbar-group">
-      <div class="app-logo">
-        <img src="TokenViewer.ico" alt="TokenViewer">
-        <span>TokenViewer</span>
+    <div class="toolbar-band">
+      <div class="toolbar-group">
+        <div class="app-logo">
+          <img src="TokenViewer.ico" alt="TokenViewer">
+          <span>TokenViewer</span>
+        </div>
+      </div>
+      <div class="toolbar-separator"></div>
+      <div class="toolbar-group">
+        <button onclick="fileNew()" title="New (Ctrl+N)">New</button>
+        <button onclick="fileOpen()" title="Open (Ctrl+O)">Open</button>
+        <button onclick="fileSave()" title="Save (Ctrl+S)">Save</button>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <div class="toolbar-group">
+        <button id="btn-theme" onclick="toggleTheme()" title="Toggle Theme">Dark Mode</button>
       </div>
     </div>
-    <div class="toolbar-separator"></div>
-    <div class="toolbar-group">
-      <button onclick="fileNew()" title="New (Ctrl+N)">New</button>
-      <button onclick="fileOpen()" title="Open (Ctrl+O)">Open</button>
-      <button onclick="fileSave()" title="Save (Ctrl+S)">Save</button>
-    </div>
-    <div class="toolbar-separator"></div>
-    <div class="toolbar-group">
-      <span class="toolbar-label">Model:</span>
-      <select id="model-select" onchange="onModelChange()">
-        <option value="gpt4o">GPT-4o (o200k_base)</option>
-        <option value="gpt4" selected>GPT-4 / 3.5 Turbo (cl100k_base)</option>
-        <option value="gpt3">GPT-3 / Codex (p50k_base)</option>
-        <option value="claude">Claude 3.5+ (estimate)</option>
-      </select>
-    </div>
-    <div class="toolbar-separator"></div>
-    <div class="toolbar-group">
-      <button id="btn-highlight" onclick="toggleHighlight()" title="Toggle Token Highlighting (Ctrl+H)">Highlight Tokens</button>
-      <button id="btn-panel" onclick="togglePanel()" title="Toggle Token Panel (Ctrl+B)">Token Details</button>
-    </div>
-    <div class="toolbar-separator"></div>
-    <div class="toolbar-group">
-      <button id="btn-theme" onclick="toggleTheme()" title="Toggle Theme">Dark Mode</button>
+    <div class="toolbar-band">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Model:</span>
+        <select id="model-select" onchange="onModelChange()">
+          <option value="gpt4o">GPT-4o (o200k_base)</option>
+          <option value="gpt4" selected>GPT-4 / 3.5 Turbo (cl100k_base)</option>
+          <option value="gpt3">GPT-3 / Codex (p50k_base)</option>
+          <option value="claude">Claude 3.5+ (estimate)</option>
+        </select>
+      </div>
+      <div class="toolbar-separator"></div>
+      <div class="toolbar-group">
+        <button id="btn-highlight" onclick="toggleHighlight()" title="Toggle Token Highlighting (Ctrl+H)">Highlight Tokens</button>
+        <button id="btn-panel" onclick="togglePanel()" title="Toggle Token Panel (Ctrl+B)">Token Details</button>
+      </div>
     </div>
   </header>
 
@@ -1404,48 +1416,39 @@ function loadWelcome() {
   editor.value =
 'Welcome to TokenViewer\n' +
 '======================\n' +
+'Simple LLM token counter.\n' +
 '\n' +
-'A simple tool for estimating and visualizing LLM tokens.\n' +
+'Type or paste text to see\n' +
+'real-time token estimates.\n' +
 '\n' +
-'Start typing or paste text here to see real-time token estimates.\n' +
-'\n' +
-'--------------------------------------------------------------\n' +
+'------------------------------\n' +
 '\n' +
 'HOW TO USE:\n' +
-'  * Type or paste any text into this editor\n' +
-'  * Watch the token count update in the status bar below\n' +
-'  * Click "Highlight Tokens" to see each token colored\n' +
-'  * Click "Token Details" to open the analysis panel\n' +
+'  * Type text into editor\n' +
+'  * Watch token count below\n' +
+'  * Tap "Highlight" for colors\n' +
+'  * Tap "Details" for analysis\n' +
 '\n' +
 'WHAT ARE TOKENS?\n' +
-'  LLMs do not read text character by character. They split\n' +
-'  text into "tokens" -- chunks of characters that the model\n' +
-'  treats as single units.\n' +
+'  LLMs split text into tokens\n' +
+'  (chunks the model reads).\n' +
 '\n' +
-'  For example:\n' +
-'    "Hello"     -> 1 token\n' +
-'    "tokenizer" -> might be "token" + "izer" = 2 tokens\n' +
-'    "AI"        -> 1 token\n' +
-'    " the"      -> 1 token (note: the space is included)\n' +
+'  "Hello"     -> 1 token\n' +
+'  "tokenizer" -> 2 tokens\n' +
+'  " the"      -> 1 token (has space)\n' +
 '\n' +
-'TIPS TO OPTIMIZE TOKEN COUNT:\n' +
-'  - Use contractions: "do not" -> "don\'t" (saves ~1 token)\n' +
-'  - Be concise: cut filler words like "basically"\n' +
-'  - Numbers 1-999 are usually 1 token each\n' +
-'  - Non-English text uses more tokens per word\n' +
-'  - Reduce extra whitespace and blank lines\n' +
+'OPTIMIZATION TIPS:\n' +
+'  - Contractions: "do not"->"don\'t"\n' +
+'  - Remove filler words\n' +
+'  - Numbers 1-999 are ~1 token\n' +
+'  - Non-English uses more tokens\n' +
+'  - Reduce extra whitespace\n' +
 '\n' +
-'--------------------------------------------------------------\n' +
-'\n' +
-'Try editing this text and watch the token count change.\n' +
-'Select a different model above to compare estimates.\n' +
-'\n' +
-'Keyboard shortcuts:\n' +
-'  Ctrl+H  Toggle token highlighting\n' +
-'  Ctrl+B  Toggle token details panel\n' +
-'  Ctrl+N  New file\n' +
-'  Ctrl+O  Open file\n' +
-'  Ctrl+S  Save file';
+'------------------------------\n' +
+'Shortcuts:\n' +
+'  Ctrl+H: Highlight tokens\n' +
+'  Ctrl+B: Token details panel\n' +
+'  Ctrl+N: New | Ctrl+S: Save';
 }
 
 // ── Init ─────────────────────────────────────────────────────────
@@ -1459,7 +1462,9 @@ function init() {
 // ── Service Worker (PWA) ─────────────────────────────────────────
 if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function() {});
+    navigator.serviceWorker.register('sw.js?v=2').then(function(reg) {
+      reg.update();
+    }).catch(function() {});
   });
 }
 
