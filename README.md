@@ -2,23 +2,35 @@
 
 > A brutally simple token counter and visualizer for LLMs. Works like Notepad.
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Web-4A90D9?style=for-the-badge&logo=googlechrome&logoColor=white)](https://samnamlb.github.io/TokenViewer/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Web-lightgrey.svg)](#)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg)](#)
 
-TokenViewer is a ightweight application that lets you type or paste text and instantly see how large language models tokenize it. It estimates token counts in real time, highlights token boundaries with distinct colors, and provides actionable heuristics to optimize and shorten your prompts.
+TokenViewer is a lightweight application that lets you type or paste text and instantly see how large language models tokenize it. It estimates token counts in real time, highlights token boundaries with distinct colors, and provides actionable heuristics to optimize and shorten your prompts.
+
+---
+
+## Live Demo
+
+Run TokenViewer directly in your browser without installing anything:
+
+👉 **[https://samnamlb.github.io/TokenViewer/](https://samnamlb.github.io/TokenViewer/)**
+
+*(Supports PWA install — click the Install button in your browser address bar to add to desktop!)*
 
 ---
 
 ## Ways to Run
 
 ### 1. Web & PWA (No install)
-- Host on **GitHub Pages** by pushing this repo (auto-deploys via GitHub Actions).
+- **Live URL:** [https://samnamlb.github.io/TokenViewer/](https://samnamlb.github.io/TokenViewer/)
 - Open `index.html` in any modern browser.
 - **Install as Desktop App:** Click the **Install TokenViewer** icon in your browser's address bar (Chrome / Edge) to add it directly to your Windows Start Menu and Desktop. Works 100% offline via Service Worker.
 
 ### 2. Standalone Native Executable
-- Download `TokenViewer.exe` from [Releases](https://github.com/your-username/TokenViewer/releases).
+- Download `TokenViewer.exe` from [Releases](https://github.com/samnamlb/TokenViewer/releases).
 - Only **~97 KB** (embeds native hi-res icon, zero console window flash).
 - Runs in dedicated frameless app mode using Windows' built-in browser engine.
 
@@ -77,6 +89,8 @@ TokenViewer/
 │   └── workflows/
 │       ├── deploy-pages.yml   # Auto-deploys to GitHub Pages on push
 │       └── release.yml        # Builds .exe, installer & zip on git tag (v*)
+├── TokenViewer.cs             # C# source for lightweight Windows launcher
+├── build.bat                  # Local one-click build script (uses csc.exe)
 ├── installer.iss              # Inno Setup installer script
 ├── index.html                 # Main application (GitHub Pages entry)
 ├── TokenViewer.html           # Standalone application file
@@ -90,6 +104,8 @@ TokenViewer/
 ├── LICENSE                    # MIT License
 └── README.md                  # Project documentation
 ```
+
+---
 
 ## License
 

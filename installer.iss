@@ -6,7 +6,7 @@
 #define MyAppName "TokenViewer"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "TokenViewer Project"
-#define MyAppURL "https://github.com/your-username/TokenViewer"
+#define MyAppURL "https://github.com/samnamlb/TokenViewer"
 #define MyAppExeName "TokenViewer.exe"
 
 [Setup]
