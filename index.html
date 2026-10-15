@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenViewer</title>
+<link rel="icon" href="TokenViewer.ico" type="image/x-icon">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ECE9D8">
+<style>
+/* ============================================================
+   ECLIPSE-STYLE THEME — Early 2000s Professional Suite
+   ============================================================ */
+
+/* ── Theme Variables ──────────────────────────────────────────── */
+:root[data-theme="light"] {
+  --bg-workspace: #ECE9D8;
+  --bg-toolbar: #EBE8D7;
+  --bg-toolbar-border: #ACA899;
+  --bg-editor: #FFFFFF;
+  --bg-gutter: #F0EFE7;
+  --bg-panel: #F6F5EE;
+  --bg-panel-header: #D6D3CB;
+  --bg-statusbar: #ECE9D8;
+  --bg-button: #ECE9D8;
+  --bg-button-hover: #F5F3E8;
+  --bg-button-active: #C8C5B8;
+  --bg-tab: #E8E6DA;
+  --bg-tab-active: #FFFFFF;
+  --bg-input: #FFFFFF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-muted: #808080;
+  --text-gutter: #A0A0A0;
+  --border-dark: #808080;
+  --border-mid: #ACA899;
+  --border-light: #D6D3CB;
+  --border-highlight: #FFFFFF;
+  --accent: #316AC5;
+  --accent-light: #D8E6F6;
+  --accent-text: #FFFFFF;
+  --inset-top: #808080;
+  --inset-bottom: #FFFFFF;
+  --outset-top: #FFFFFF;
+  --outset-bottom: #808080;
+  --scrollbar-thumb: #C8C5B8;
+  --scrollbar-track: #ECE9D8;
+  --token-colors: #FFD4D0, #FFE4C8, #FFF0C0, #C8EFCC, #C0DEFF, #D8CCF0, #F8CCE8, #C0F0EC, #FFDCA0, #C8E8D0;
+  --token-borders: #E0A0A0, #E0B888, #D8C878, #88C898, #80B0E0, #A898D0, #D898C0, #88D0C8, #D8A858, #98C8A8;
+}
+
+:root[data-theme="dark"] {
+  --bg-workspace: #2D2D2D;
+  --bg-toolbar: #383838;
+  --bg-toolbar-border: #555555;
+  --bg-editor: #1E1E1E;
+  --bg-gutter: #252525;
+  --bg-panel: #2D2D2D;
+  --bg-panel-header: #383838;
+  --bg-statusbar: #333333;
+  --bg-button: #3C3C3C;
+  --bg-button-hover: #4A4A4A;
+  --bg-button-active: #555555;
+  --bg-tab: #333333;
+  --bg-tab-active: #1E1E1E;
+  --bg-input: #2A2A2A;
+  --text-primary: #D4D4D4;
+  --text-secondary: #A0A0A0;
+  --text-muted: #666666;
+  --text-gutter: #555555;
+  --border-dark: #1A1A1A;
+  --border-mid: #4A4A4A;
+  --border-light: #555555;
+  --border-highlight: #555555;
+  --accent: #569CD6;
+  --accent-light: #2A3A4A;
+  --accent-text: #FFFFFF;
+  --inset-top: #1A1A1A;
+  --inset-bottom: #555555;
+  --outset-top: #555555;
+  --outset-bottom: #1A1A1A;
+  --scrollbar-thumb: #555555;
+  --scrollbar-track: #2D2D2D;
+  --token-colors: #4A2020, #4A3018, #4A4418, #183A20, #182E4A, #30204A, #4A1838, #184A40, #4A3418, #204A30;
+  --token-borders: #6A3838, #6A4828, #6A6028, #285A38, #284A6A, #483868, #6A2858, #286A58, #6A4C28, #386A48;
+}
+
+/* ── Base Reset ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: Tahoma, 'MS Sans Serif', Geneva, sans-serif;
+  font-size: 11px;
+  background: var(--bg-workspace);
+  color: var(--text-primary);
+}
+
+/* ── Classic 3D Border Utilities ──────────────────────────────── */
+.border-outset {
+  border: 1px solid;
+  border-color: var(--outset-top) var(--outset-bottom) var(--outset-bottom) var(--outset-top);
+}
+
+.border-inset {
+  border: 1px solid;
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+}
+
+/* ── Buttons (Classic Windows Style) ──────────────────────────── */
+button {
+  font-family: Tahoma, 'MS Sans Serif', Geneva, sans-serif;
+  font-size: 11px;
+  background: var(--bg-button);
+  color: var(--text-primary);
+  padding: 2px 8px;
+  border: 1px solid;
+  border-color: var(--outset-top) var(--outset-bottom) var(--outset-bottom) var(--outset-top);
+  cursor: pointer;
+  min-height: 22px;
+  white-space: nowrap;
+}
+button:hover {
+  background: var(--bg-button-hover);
+}
+button:active {
+  background: var(--bg-button-active);
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+}
+button.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+}
+
+select {
+  font-family: Tahoma, 'MS Sans Serif', Geneva, sans-serif;
+  font-size: 11px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  padding: 1px 4px;
+  min-height: 22px;
+  border: 1px solid;
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+}
+
+/* ── App Layout ───────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ============================================================
+   TOOLBAR (Eclipse-style coolbar)
+   ============================================================ */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--bg-toolbar-border);
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 2px;
+}
+
+.toolbar-separator {
+  width: 2px;
+  height: 20px;
+  margin: 0 3px;
+  border-left: 1px solid var(--border-dark);
+  border-right: 1px solid var(--border-highlight);
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+  user-select: none;
+}
+.app-logo img {
+  width: 16px;
+  height: 16px;
+  image-rendering: auto;
+}
+.app-logo span {
+  font-weight: bold;
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+.toolbar-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-right: 2px;
+}
+
+/* ============================================================
+   WORKSPACE (Editor + Panel)
+   ============================================================ */
+#workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ============================================================
+   EDITOR CONTAINER
+   ============================================================ */
+#editor-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+  margin: 2px;
+  margin-right: 0;
+}
+
+/* Line numbers gutter */
+#gutter {
+  width: 48px;
+  flex-shrink: 0;
+  background: var(--bg-gutter);
+  border-right: 1px solid var(--border-light);
+  padding: 4px 0;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-gutter);
+  text-align: right;
+}
+#gutter .line-num {
+  padding-right: 8px;
+  height: 19.5px; /* 13 * 1.5 */
+}
+
+/* Editor wrapper */
+#editor-wrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-editor);
+}
+
+#backdrop {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 4px 6px;
+  overflow: auto;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#highlight-content {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: transparent;
+}
+
+#highlight-content .token-hl {
+  padding: 0 0;
+  color: var(--text-primary);
+}
+
+#editor {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 4px 6px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  tab-size: 4;
+}
+
+#editor.highlighting {
+  color: transparent;
+  caret-color: var(--text-primary);
+}
+
+/* Classic scrollbars */
+#editor::-webkit-scrollbar,
+#backdrop::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+#editor::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border: 1px solid var(--border-mid);
+}
+#editor::-webkit-scrollbar-thumb {
+  background: var(--bg-button);
+  border: 1px solid;
+  border-color: var(--outset-top) var(--outset-bottom) var(--outset-bottom) var(--outset-top);
+}
+#editor::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-button-hover);
+}
+
+/* ============================================================
+   TOKEN DETAIL PANEL (Eclipse-style View)
+   ============================================================ */
+#panel {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+  margin: 2px;
+  margin-left: 2px;
+}
+#panel.collapsed {
+  display: none;
+}
+
+.panel-header {
+  padding: 2px 6px;
+  font-weight: bold;
+  font-size: 11px;
+  background: var(--bg-panel-header);
+  border-bottom: 1px solid var(--border-mid);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 22px;
+}
+.panel-header-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 0 4px;
+  min-height: auto;
+  cursor: pointer;
+  font-weight: bold;
+}
+.panel-header-close:hover {
+  color: var(--text-primary);
+  background: none;
+  border: none;
+}
+
+.panel-tabs {
+  display: flex;
+  background: var(--bg-panel);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-mid);
+}
+.panel-tab {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: var(--bg-tab);
+  color: var(--text-secondary);
+  min-height: 20px;
+  margin-bottom: -1px;
+}
+.panel-tab:hover {
+  color: var(--text-primary);
+}
+.panel-tab.active {
+  color: var(--text-primary);
+  background: var(--bg-tab-active);
+  border-color: var(--border-mid);
+  border-bottom-color: var(--bg-tab-active);
+  font-weight: bold;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+  font-size: 11px;
+  background: var(--bg-panel);
+}
+
+/* Token list items */
+.token-list-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+}
+.token-list-item:hover {
+  background: var(--accent-light);
+}
+.token-idx {
+  color: var(--text-muted);
+  font-size: 10px;
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.token-chip {
+  padding: 0px 3px;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  border: 1px solid;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.token-bytes {
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Token map */
+.token-map {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  padding: 4px;
+}
+.token-map-cell {
+  height: 10px;
+  min-width: 4px;
+  cursor: default;
+  position: relative;
+}
+.token-map-cell:hover { opacity: 0.7; }
+.token-map-cell[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333333;
+  color: #FFFFFF;
+  padding: 2px 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  border: 1px solid #000000;
+}
+
+/* Info cards / tips */
+.info-card {
+  padding: 4px 6px;
+  background: var(--bg-editor);
+  border: 1px solid var(--border-light);
+  margin-bottom: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.info-card strong {
+  color: var(--accent);
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1px 8px;
+  font-size: 11px;
+  padding: 2px 0;
+}
+.data-grid .data-label { color: var(--text-secondary); }
+.data-grid .data-value { text-align: right; font-family: 'Courier New', monospace; font-size: 11px; }
+
+/* ============================================================
+   STATUS BAR (Eclipse-style, sunken fields)
+   ============================================================ */
+#statusbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: var(--bg-statusbar);
+  border-top: 1px solid var(--border-highlight);
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.stat-item {
+  padding: 1px 8px;
+  border: 1px solid;
+  border-color: var(--inset-top) var(--inset-bottom) var(--inset-bottom) var(--inset-top);
+  background: var(--bg-statusbar);
+  white-space: nowrap;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+}
+.stat-item.highlight {
+  color: var(--accent);
+  font-weight: bold;
+}
+.stat-spacer { flex: 1; }
+
+/* ============================================================
+   DRAG-AND-DROP OVERLAY
+   ============================================================ */
+#drop-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(49, 106, 197, 0.12);
+  border: 2px dashed var(--accent);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--accent);
+}
+#drop-overlay.visible { display: flex; }
+
+/* Scrollbar for panel */
+.panel-body::-webkit-scrollbar { width: 16px; }
+.panel-body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border: 1px solid var(--border-mid);
+}
+.panel-body::-webkit-scrollbar-thumb {
+  background: var(--bg-button);
+  border: 1px solid;
+  border-color: var(--outset-top) var(--outset-bottom) var(--outset-bottom) var(--outset-top);
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- ==================== TOOLBAR ==================== -->
+  <header id="toolbar">
+    <div class="toolbar-group">
+      <div class="app-logo">
+        <img src="TokenViewer.ico" alt="TokenViewer">
+        <span>TokenViewer</span>
+      </div>
+    </div>
+    <div class="toolbar-separator"></div>
+    <div class="toolbar-group">
+      <button onclick="fileNew()" title="New (Ctrl+N)">New</button>
+      <button onclick="fileOpen()" title="Open (Ctrl+O)">Open</button>
+      <button onclick="fileSave()" title="Save (Ctrl+S)">Save</button>
+    </div>
+    <div class="toolbar-separator"></div>
+    <div class="toolbar-group">
+      <span class="toolbar-label">Model:</span>
+      <select id="model-select" onchange="onModelChange()">
+        <option value="gpt4o">GPT-4o (o200k_base)</option>
+        <option value="gpt4" selected>GPT-4 / 3.5 Turbo (cl100k_base)</option>
+        <option value="gpt3">GPT-3 / Codex (p50k_base)</option>
+        <option value="claude">Claude 3.5+ (estimate)</option>
+      </select>
+    </div>
+    <div class="toolbar-separator"></div>
+    <div class="toolbar-group">
+      <button id="btn-highlight" onclick="toggleHighlight()" title="Toggle Token Highlighting (Ctrl+H)">Highlight Tokens</button>
+      <button id="btn-panel" onclick="togglePanel()" title="Toggle Token Panel (Ctrl+B)">Token Details</button>
+    </div>
+    <div class="toolbar-separator"></div>
+    <div class="toolbar-group">
+      <button id="btn-theme" onclick="toggleTheme()" title="Toggle Theme">Dark Mode</button>
+    </div>
+  </header>
+
+  <!-- ==================== WORKSPACE ==================== -->
+  <main id="workspace">
+    <div id="editor-container">
+      <div id="gutter"></div>
+      <div id="editor-wrapper">
+        <div id="backdrop">
+          <div id="highlight-content"></div>
+        </div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+          placeholder="Start typing or paste text here..."></textarea>
+      </div>
+    </div>
+
+    <aside id="panel" class="collapsed">
+      <div class="panel-header">
+        <span>Token Analysis</span>
+        <button class="panel-header-close" onclick="togglePanel()" title="Close">x</button>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" data-tab="list" onclick="switchTab('list')">Token List</button>
+        <button class="panel-tab" data-tab="map" onclick="switchTab('map')">Token Map</button>
+        <button class="panel-tab" data-tab="tips" onclick="switchTab('tips')">Tips / Cost</button>
+      </div>
+      <div class="panel-body" id="panel-body"></div>
+    </aside>
+  </main>
+
+  <!-- ==================== STATUS BAR ==================== -->
+  <footer id="statusbar">
+    <span class="stat-item" id="stat-pos">Ln 1, Col 1</span>
+    <span class="stat-item" id="stat-chars">0 chars</span>
+    <span class="stat-item" id="stat-words">0 words</span>
+    <span class="stat-item" id="stat-lines">1 line</span>
+    <span class="stat-item highlight" id="stat-tokens">~0 tokens</span>
+    <span class="stat-spacer"></span>
+    <span class="stat-item" id="stat-ratio">0 tok/word</span>
+    <span class="stat-item" id="stat-model">cl100k_base</span>
+  </footer>
+</div>
+
+<!-- Drop overlay -->
+<div id="drop-overlay">Drop file to open</div>
+
+<script>
+/* ==============================================================
+   TOKEN VIEWER — Core Logic
+   ============================================================== */
+
+// ── Token Color Palettes ─────────────────────────────────────────
+function getTokenColors() {
+  var style = getComputedStyle(document.documentElement);
+  var raw = style.getPropertyValue('--token-colors').trim();
+  return raw.split(',').map(function(c) { return c.trim(); });
+}
+function getTokenBorders() {
+  var style = getComputedStyle(document.documentElement);
+  var raw = style.getPropertyValue('--token-borders').trim();
+  return raw.split(',').map(function(c) { return c.trim(); });
+}
+
+// ── Model Configurations ─────────────────────────────────────────
+var MODELS = {
+  gpt4o: {
+    name: 'GPT-4o', encoding: 'o200k_base',
+    bytesPerToken: 3.8,
+    costPerMInput: 2.50, costPerMOutput: 10.00
+  },
+  gpt4: {
+    name: 'GPT-4 / 3.5T', encoding: 'cl100k_base',
+    bytesPerToken: 3.7,
+    costPerMInput: 2.50, costPerMOutput: 10.00
+  },
+  gpt3: {
+    name: 'GPT-3', encoding: 'p50k_base',
+    bytesPerToken: 3.3,
+    costPerMInput: 0.50, costPerMOutput: 1.50
+  },
+  claude: {
+    name: 'Claude 3.5+', encoding: 'claude (est.)',
+    bytesPerToken: 3.5,
+    costPerMInput: 3.00, costPerMOutput: 15.00
+  }
+};
+
+// ── Tokenizer Engine ─────────────────────────────────────────────
+var TokenizerEngine = (function() {
+  function TokenizerEngine() {
+    // GPT cl100k_base / o200k_base pre-tokenization regex.
+    // This is the exact first-stage regex used by tiktoken.
+    this.preTokenPattern = new RegExp(
+      "(?:'s|'t|'re|'ve|'m|'ll|'d)" +
+      "|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+" +
+      "|\\p{N}{1,3}" +
+      "| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*" +
+      "|\\s*[\\r\\n]" +
+      "|\\s+(?!\\S)" +
+      "|\\s+",
+      'giu'
+    );
+    this.encoder = new TextEncoder();
+  }
+
+  TokenizerEngine.prototype.tokenize = function(text, model) {
+    model = model || 'gpt4';
+    if (!text) return [];
+
+    var bpt = MODELS[model] ? MODELS[model].bytesPerToken : 3.7;
+    var tokens = [];
+    var match;
+
+    this.preTokenPattern.lastIndex = 0;
+
+    while ((match = this.preTokenPattern.exec(text)) !== null) {
+      var preToken = match[0];
+      var start = match.index;
+      var bytes = this.encoder.encode(preToken);
+      var byteLen = bytes.length;
+      var estSubTokens = Math.max(1, Math.round(byteLen / bpt));
+
+      if (estSubTokens <= 1) {
+        tokens.push({ text: preToken, start: start, end: start + preToken.length, byteLen: byteLen });
+      } else {
+        var chars = Array.from(preToken);
+        var chunkSize = Math.max(1, Math.ceil(chars.length / estSubTokens));
+        var offset = start;
+        for (var i = 0; i < chars.length; i += chunkSize) {
+          var chunk = chars.slice(i, i + chunkSize).join('');
+          var chunkBytes = this.encoder.encode(chunk);
+          tokens.push({
+            text: chunk,
+            start: offset,
+            end: offset + chunk.length,
+            byteLen: chunkBytes.length
+          });
+          offset += chunk.length;
+        }
+      }
+    }
+
+    return tokens;
+  };
+
+  TokenizerEngine.prototype.countTokens = function(text, model) {
+    return this.tokenize(text, model).length;
+  };
+
+  return TokenizerEngine;
+})();
+
+// ── App State ────────────────────────────────────────────────────
+var state = {
+  highlighting: false,
+  panelOpen: false,
+  activeTab: 'list',
+  model: 'gpt4',
+  tokens: [],
+  fileName: 'Untitled',
+  isDirty: false,
+  fileHandle: null
+};
+
+var tokenizer = new TokenizerEngine();
+
+// ── DOM Elements ─────────────────────────────────────────────────
+var editor = document.getElementById('editor');
+var backdrop = document.getElementById('backdrop');
+var highlightContent = document.getElementById('highlight-content');
+var gutter = document.getElementById('gutter');
+var panel = document.getElementById('panel');
+var panelBody = document.getElementById('panel-body');
+var dropOverlay = document.getElementById('drop-overlay');
+
+// ── Editor Logic ─────────────────────────────────────────────────
+var debounceTimer = null;
+
+editor.addEventListener('input', function() {
+  state.isDirty = true;
+  scheduleUpdate();
+});
+
+editor.addEventListener('scroll', function() {
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
+  gutter.scrollTop = editor.scrollTop;
+});
+
+editor.addEventListener('keyup', updateCursorPosition);
+editor.addEventListener('click', updateCursorPosition);
+
+function scheduleUpdate() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(performUpdate, 80);
+}
+
+function performUpdate() {
+  var text = editor.value;
+  state.tokens = tokenizer.tokenize(text, state.model);
+  updateStats(text);
+  updateLineNumbers(text);
+  if (state.highlighting) renderHighlights();
+  if (state.panelOpen) renderPanel();
+  updateTitle();
+}
+
+// ── Statistics ───────────────────────────────────────────────────
+function updateStats(text) {
+  var len = text.length;
+  var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  var lines = text.split('\n').length;
+  var tokens = state.tokens.length;
+  var ratio = words > 0 ? (tokens / words).toFixed(2) : '0.00';
+
+  document.getElementById('stat-chars').textContent = len.toLocaleString() + ' char' + (len !== 1 ? 's' : '');
+  document.getElementById('stat-words').textContent = words.toLocaleString() + ' word' + (words !== 1 ? 's' : '');
+  document.getElementById('stat-lines').textContent = lines.toLocaleString() + ' line' + (lines !== 1 ? 's' : '');
+  document.getElementById('stat-tokens').textContent = '~' + tokens.toLocaleString() + ' tokens';
+  document.getElementById('stat-ratio').textContent = ratio + ' tok/word';
+  document.getElementById('stat-model').textContent = MODELS[state.model].encoding;
+}
+
+function updateCursorPosition() {
+  var pos = editor.selectionStart;
+  var text = editor.value.substring(0, pos);
+  var lines = text.split('\n');
+  var ln = lines.length;
+  var col = lines[lines.length - 1].length + 1;
+  document.getElementById('stat-pos').textContent = 'Ln ' + ln + ', Col ' + col;
+}
+
+// ── Line Numbers ─────────────────────────────────────────────────
+function updateLineNumbers(text) {
+  var lines = text.split('\n').length;
+  var html = '';
+  for (var i = 1; i <= lines; i++) {
+    html += '<div class="line-num">' + i + '</div>';
+  }
+  gutter.innerHTML = html;
+}
+
+// ── Token Highlighting ──────────────────────────────────────────
+function renderHighlights() {
+  if (!state.highlighting) {
+    highlightContent.innerHTML = '';
+    return;
+  }
+
+  var text = editor.value;
+  var tokens = state.tokens;
+  var colors = getTokenColors();
+  var borders = getTokenBorders();
+
+  if (tokens.length === 0) {
+    highlightContent.textContent = text;
+    return;
+  }
+
+  var parts = [];
+  var lastEnd = 0;
+
+  for (var i = 0; i < tokens.length; i++) {
+    var t = tokens[i];
+    if (t.start > lastEnd) {
+      parts.push(escapeHtml(text.substring(lastEnd, t.start)));
+    }
+    var ci = i % colors.length;
+    parts.push(
+      '<span class="token-hl" style="background:' + colors[ci] +
+      ';border-bottom:2px solid ' + borders[ci] + '">' +
+      escapeHtml(t.text) + '</span>'
+    );
+    lastEnd = t.end;
+  }
+
+  if (lastEnd < text.length) {
+    parts.push(escapeHtml(text.substring(lastEnd)));
+  }
+
+  highlightContent.innerHTML = parts.join('');
+}
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Toggle Actions ───────────────────────────────────────────────
+function toggleHighlight() {
+  state.highlighting = !state.highlighting;
+  document.getElementById('btn-highlight').classList.toggle('active', state.highlighting);
+  editor.classList.toggle('highlighting', state.highlighting);
+
+  if (state.highlighting) {
+    renderHighlights();
+  } else {
+    highlightContent.innerHTML = '';
+  }
+}
+
+function togglePanel() {
+  state.panelOpen = !state.panelOpen;
+  panel.classList.toggle('collapsed', !state.panelOpen);
+  document.getElementById('btn-panel').classList.toggle('active', state.panelOpen);
+  if (state.panelOpen) renderPanel();
+}
+
+function toggleTheme() {
+  var html = document.documentElement;
+  var current = html.dataset.theme;
+  var next = current === 'light' ? 'dark' : 'light';
+  html.dataset.theme = next;
+  document.getElementById('btn-theme').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+  if (state.highlighting) renderHighlights();
+  if (state.panelOpen) renderPanel();
+}
+
+function onModelChange() {
+  state.model = document.getElementById('model-select').value;
+  performUpdate();
+}
+
+// ── Panel Rendering ──────────────────────────────────────────────
+function switchTab(tab) {
+  state.activeTab = tab;
+  var tabs = document.querySelectorAll('.panel-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].classList.toggle('active', tabs[i].dataset.tab === tab);
+  }
+  renderPanel();
+}
+
+function renderPanel() {
+  switch (state.activeTab) {
+    case 'list': renderTokenList(); break;
+    case 'map': renderTokenMap(); break;
+    case 'tips': renderTips(); break;
+  }
+}
+
+function renderTokenList() {
+  var tokens = state.tokens;
+  var colors = getTokenColors();
+  var borders = getTokenBorders();
+  var MAX = 500;
+
+  var html = '<div style="color:var(--text-muted);margin-bottom:4px;padding:2px;">';
+  if (tokens.length > MAX) {
+    html += 'Showing first ' + MAX + ' of ' + tokens.length.toLocaleString() + ' tokens';
+  } else {
+    html += tokens.length.toLocaleString() + ' tokens total';
+  }
+  html += '</div>';
+
+  var limit = Math.min(tokens.length, MAX);
+  for (var i = 0; i < limit; i++) {
+    var t = tokens[i];
+    var ci = i % colors.length;
+    var display = t.text.replace(/\n/g, '[LF]').replace(/\r/g, '').replace(/ /g, '\u00B7');
+    html += '<div class="token-list-item">' +
+      '<span class="token-idx">' + i + '</span>' +
+      '<span class="token-chip" style="background:' + colors[ci] + ';border-color:' + borders[ci] + '"' +
+      ' title="' + escapeHtml(JSON.stringify(t.text)) + '">' + escapeHtml(display) + '</span>' +
+      '<span class="token-bytes">' + t.byteLen + 'B</span>' +
+      '</div>';
+  }
+
+  panelBody.innerHTML = html;
+}
+
+function renderTokenMap() {
+  var tokens = state.tokens;
+  var colors = getTokenColors();
+  var MAX = 2000;
+
+  var html = '<div style="color:var(--text-muted);margin-bottom:4px;padding:2px;">' +
+    'Each cell = 1 token. Width proportional to length. Hover for details.' +
+    '</div><div class="token-map">';
+
+  var limit = Math.min(tokens.length, MAX);
+  for (var i = 0; i < limit; i++) {
+    var t = tokens[i];
+    var ci = i % colors.length;
+    var w = Math.max(4, Math.min(32, t.text.length * 6));
+    var tip = t.text.replace(/"/g, '&quot;').replace(/\n/g, '[LF]').replace(/ /g, '\u00B7');
+    html += '<div class="token-map-cell" style="width:' + w + 'px;background:' + colors[ci] + '"' +
+      ' data-tooltip="#' + i + ': ' + tip + '"></div>';
+  }
+
+  html += '</div>';
+  if (tokens.length > MAX) {
+    html += '<div style="color:var(--text-muted);margin-top:4px;padding:2px;">' +
+      '... and ' + (tokens.length - MAX).toLocaleString() + ' more tokens</div>';
+  }
+
+  panelBody.innerHTML = html;
+}
+
+function renderTips() {
+  var tokens = state.tokens;
+  var text = editor.value;
+  var m = MODELS[state.model];
+  var cost = tokens.length > 0 ? (tokens.length / 1000000 * m.costPerMInput) : 0;
+  var costOut = tokens.length > 0 ? (tokens.length / 1000000 * m.costPerMOutput) : 0;
+
+  var longTokens = tokens.filter(function(t) { return t.byteLen > 12; });
+  var wsTokens = tokens.filter(function(t) { return /^\s+$/.test(t.text) && t.text.length > 1; });
+  var avgBytes = tokens.length > 0
+    ? (tokens.reduce(function(s, t) { return s + t.byteLen; }, 0) / tokens.length).toFixed(1) : '0';
+
+  var html = '' +
+    '<div class="info-card">' +
+      '<strong>Estimated API Cost</strong>' +
+      '<div class="data-grid" style="margin-top:4px;">' +
+        '<span class="data-label">' + m.name + ' Input:</span>' +
+        '<span class="data-value">$' + cost.toFixed(6) + '</span>' +
+        '<span class="data-label">' + m.name + ' Output:</span>' +
+        '<span class="data-value">$' + costOut.toFixed(6) + '</span>' +
+        '<span class="data-label">Per 1K tokens (in):</span>' +
+        '<span class="data-value">$' + (m.costPerMInput / 1000).toFixed(4) + '</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Token Efficiency</strong>' +
+      '<div class="data-grid" style="margin-top:4px;">' +
+        '<span class="data-label">Total tokens:</span>' +
+        '<span class="data-value">~' + tokens.length.toLocaleString() + '</span>' +
+        '<span class="data-label">Chars / token:</span>' +
+        '<span class="data-value">' + (tokens.length > 0 ? (text.length / tokens.length).toFixed(1) : '--') + '</span>' +
+        '<span class="data-label">Avg bytes / token:</span>' +
+        '<span class="data-value">' + avgBytes + '</span>' +
+        '<span class="data-label">Multi-byte tokens:</span>' +
+        '<span class="data-value">' + longTokens.length + '</span>' +
+        '<span class="data-label">Whitespace tokens:</span>' +
+        '<span class="data-value">' + wsTokens.length + '</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Common words like "the", "is", "and", "to" are ' +
+      'typically 1 token. Prefer familiar vocabulary.' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Use contractions. "do not" becomes "don\'t" and can ' +
+      'save tokens. "I will" becomes "I\'ll", "they are" becomes "they\'re".' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Numbers with 1-3 digits are usually 1 token. ' +
+      '"1000" may be 1 token, but "123456" could be 2-3 tokens.' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Remove filler words like "basically", "actually", ' +
+      '"essentially" -- they add tokens without adding meaning.' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Non-English text and special characters use more ' +
+      'bytes per character, resulting in more tokens per word.' +
+    '</div>' +
+
+    '<div class="info-card">' +
+      '<strong>Tip:</strong> Extra spaces and blank lines cost tokens. ' +
+      'Keep formatting minimal in prompts.' +
+    '</div>';
+
+  if (longTokens.length > 0) {
+    html += '<div class="info-card" style="border-color:var(--accent);">' +
+      '<strong>Note:</strong> Found ' + longTokens.length + ' long token' +
+      (longTokens.length > 1 ? 's' : '') + ' (>12 bytes). These may indicate ' +
+      'uncommon words or non-ASCII text that could be rephrased.' +
+    '</div>';
+  }
+
+  if (wsTokens.length > 3) {
+    html += '<div class="info-card" style="border-color:var(--accent);">' +
+      '<strong>Note:</strong> Found ' + wsTokens.length + ' multi-char whitespace tokens. ' +
+      'Consider reducing extra spaces or blank lines.' +
+    '</div>';
+  }
+
+  panelBody.innerHTML = html;
+}
+
+// ── File Operations ──────────────────────────────────────────────
+function fileNew() {
+  if (state.isDirty && !confirm('Discard unsaved changes?')) return;
+  editor.value = '';
+  state.fileName = 'Untitled';
+  state.isDirty = false;
+  state.fileHandle = null;
+  performUpdate();
+  editor.focus();
+}
+
+function fileOpen() {
+  if ('showOpenFilePicker' in window) {
+    window.showOpenFilePicker({
+      types: [
+        { description: 'Text Files', accept: { 'text/*': ['.txt', '.md', '.json', '.xml', '.csv', '.log', '.py', '.js', '.html', '.css'] } },
+        { description: 'All Files', accept: { '*/*': [] } }
+      ]
+    }).then(function(handles) {
+      var handle = handles[0];
+      return handle.getFile().then(function(file) {
+        return file.text().then(function(text) {
+          editor.value = text;
+          state.fileName = file.name;
+          state.fileHandle = handle;
+          state.isDirty = false;
+          performUpdate();
+          editor.focus();
+        });
+      });
+    }).catch(function(e) {
+      if (e.name !== 'AbortError') console.error(e);
+    });
+    return;
+  }
+
+  // Fallback
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt,.md,.json,.xml,.csv,.log,.py,.js,.html,.css,text/*';
+  input.onchange = function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    file.text().then(function(text) {
+      editor.value = text;
+      state.fileName = file.name;
+      state.isDirty = false;
+      state.fileHandle = null;
+      performUpdate();
+      editor.focus();
+    });
+  };
+  input.click();
+}
+
+function fileSave() {
+  var text = editor.value;
+
+  if (state.fileHandle) {
+    state.fileHandle.createWritable().then(function(writable) {
+      return writable.write(text).then(function() {
+        return writable.close();
+      });
+    }).then(function() {
+      state.isDirty = false;
+      updateTitle();
+    }).catch(function() { fileSaveAs(); });
+    return;
+  }
+
+  fileSaveAs();
+}
+
+function fileSaveAs() {
+  var text = editor.value;
+
+  if ('showSaveFilePicker' in window) {
+    window.showSaveFilePicker({
+      suggestedName: state.fileName === 'Untitled' ? 'document.txt' : state.fileName,
+      types: [
+        { description: 'Text Files', accept: { 'text/plain': ['.txt'] } },
+        { description: 'Markdown', accept: { 'text/markdown': ['.md'] } },
+        { description: 'All Files', accept: { '*/*': [] } }
+      ]
+    }).then(function(handle) {
+      return handle.createWritable().then(function(writable) {
+        return writable.write(text).then(function() {
+          return writable.close().then(function() {
+            state.fileHandle = handle;
+            state.fileName = handle.name;
+            state.isDirty = false;
+            updateTitle();
+          });
+        });
+      });
+    }).catch(function(e) {
+      if (e.name !== 'AbortError') console.error(e);
+    });
+    return;
+  }
+
+  // Download fallback
+  var blob = new Blob([text], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = state.fileName === 'Untitled' ? 'document.txt' : state.fileName;
+  a.click();
+  URL.revokeObjectURL(url);
+  state.isDirty = false;
+  updateTitle();
+}
+
+function updateTitle() {
+  document.title = (state.isDirty ? '* ' : '') + state.fileName + ' - TokenViewer';
+}
+
+// ── Keyboard Shortcuts ───────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  var ctrl = e.ctrlKey || e.metaKey;
+  if (ctrl && e.key === 'n') { e.preventDefault(); fileNew(); }
+  else if (ctrl && e.key === 'o') { e.preventDefault(); fileOpen(); }
+  else if (ctrl && e.key === 's') { e.preventDefault(); fileSave(); }
+  else if (ctrl && e.key === 'h') { e.preventDefault(); toggleHighlight(); }
+  else if (ctrl && e.key === 'b') { e.preventDefault(); togglePanel(); }
+});
+
+// ── Drag and Drop ────────────────────────────────────────────────
+var dragCounter = 0;
+
+document.addEventListener('dragenter', function(e) {
+  e.preventDefault();
+  dragCounter++;
+  dropOverlay.classList.add('visible');
+});
+
+document.addEventListener('dragleave', function(e) {
+  e.preventDefault();
+  dragCounter--;
+  if (dragCounter <= 0) {
+    dragCounter = 0;
+    dropOverlay.classList.remove('visible');
+  }
+});
+
+document.addEventListener('dragover', function(e) { e.preventDefault(); });
+
+document.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dragCounter = 0;
+  dropOverlay.classList.remove('visible');
+
+  var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) {
+    file.text().then(function(text) {
+      editor.value = text;
+      state.fileName = file.name;
+      state.isDirty = false;
+      state.fileHandle = null;
+      performUpdate();
+      editor.focus();
+    });
+  }
+});
+
+// ── Welcome Text ─────────────────────────────────────────────────
+function loadWelcome() {
+  editor.value =
+'Welcome to TokenViewer\n' +
+'======================\n' +
+'\n' +
+'A simple tool for estimating and visualizing LLM tokens.\n' +
+'\n' +
+'Start typing or paste text here to see real-time token estimates.\n' +
+'\n' +
+'--------------------------------------------------------------\n' +
+'\n' +
+'HOW TO USE:\n' +
+'  * Type or paste any text into this editor\n' +
+'  * Watch the token count update in the status bar below\n' +
+'  * Click "Highlight Tokens" to see each token colored\n' +
+'  * Click "Token Details" to open the analysis panel\n' +
+'\n' +
+'WHAT ARE TOKENS?\n' +
+'  LLMs do not read text character by character. They split\n' +
+'  text into "tokens" -- chunks of characters that the model\n' +
+'  treats as single units.\n' +
+'\n' +
+'  For example:\n' +
+'    "Hello"     -> 1 token\n' +
+'    "tokenizer" -> might be "token" + "izer" = 2 tokens\n' +
+'    "AI"        -> 1 token\n' +
+'    " the"      -> 1 token (note: the space is included)\n' +
+'\n' +
+'TIPS TO OPTIMIZE TOKEN COUNT:\n' +
+'  - Use contractions: "do not" -> "don\'t" (saves ~1 token)\n' +
+'  - Be concise: cut filler words like "basically"\n' +
+'  - Numbers 1-999 are usually 1 token each\n' +
+'  - Non-English text uses more tokens per word\n' +
+'  - Reduce extra whitespace and blank lines\n' +
+'\n' +
+'--------------------------------------------------------------\n' +
+'\n' +
+'Try editing this text and watch the token count change.\n' +
+'Select a different model above to compare estimates.\n' +
+'\n' +
+'Keyboard shortcuts:\n' +
+'  Ctrl+H  Toggle token highlighting\n' +
+'  Ctrl+B  Toggle token details panel\n' +
+'  Ctrl+N  New file\n' +
+'  Ctrl+O  Open file\n' +
+'  Ctrl+S  Save file';
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+function init() {
+  loadWelcome();
+  performUpdate();
+  updateCursorPosition();
+  editor.focus();
+}
+
+// ── Service Worker (PWA) ─────────────────────────────────────────
+if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
+
+init();
+</script>
+</body>
+</html>
