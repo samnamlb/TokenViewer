@@ -22,7 +22,7 @@
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Web-lightgrey.svg" alt="Windows and Web">
   <img src="https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg" alt="Zero Dependencies">
 </p>
----
+
 
 ## Live Demo
 
@@ -30,7 +30,7 @@ Run TokenViewer directly in your browser without installing anything:
 
 --> **[https://samnamlb.github.io/TokenViewer/](https://samnamlb.github.io/TokenViewer/)**
 
----
+You can also install as a desktop app via provided installer or .exe (see Releases)
 
 ## Features
 
@@ -43,7 +43,6 @@ Run TokenViewer directly in your browser without installing anything:
 - **Model Selector** — Compare estimates across GPT-4o (`o200k_base`), GPT-4 / 3.5 (`cl100k_base`), GPT-3 (`p50k_base`), and Claude 3.5+.
 - **Dark / Light Mode** — Themes for daytime or night-time writing.
 
----
 ## Keyboard Shortcuts
 
 | Shortcut | Action |
@@ -53,10 +52,8 @@ Run TokenViewer directly in your browser without installing anything:
 | `Ctrl+S` | Save file |
 | `Ctrl+H` | Toggle token highlighting |
 | `Ctrl+B` | Toggle token details panel |
----
 
 ## How It Estimates Tokens
-
 LLMs do not read plain text character-by-character. Instead, they split text into **tokens** using Byte Pair Encoding (BPE).
 
 1. **Pre-tokenization Stage:** Text is segmented using the official GPT regex pattern (`cl100k_base` / `o200k_base`) to isolate contractions, words, numbers, and whitespace.
@@ -66,5 +63,4 @@ LLMs do not read plain text character-by-character. Instead, they split text int
 
 
 ## License
-
 Released under the [MIT License](LICENSE).
